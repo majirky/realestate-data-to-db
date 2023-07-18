@@ -3,7 +3,9 @@ from Excract.Excract import Excract
 from Excract.Website import *
 from Load.Load import *
 from Load.Database import *
+from Transform.Transform import Transform
 import requests
+from dataclasses import asdict
 
 class Pipeline:
 
@@ -13,6 +15,7 @@ class Pipeline:
         self.debug = debug
 
         self.excractor = Excract()
+        self.transformer = Transform()
         self.loader = Load()
 
         self.data = []
@@ -23,7 +26,7 @@ class Pipeline:
         With provided City and page limit in class initialization it iterates over available pages and uses scrap_advertisements_container method.
         """
 
-        # ============= LOAD PART================
+        # ============= EXTRACT PART================
         for current_page in range(1, self.pages_limit):
             url = f"https://www.nehnutelnosti.sk/{self.city}/?p[page]={current_page}"
             web_page = requests.get(url)
@@ -35,14 +38,16 @@ class Pipeline:
             )
             
         # ============ TRANSFORM PART==========
-        for page_data in self.data:
-            for ad_data in page_data:
-                print(ad_data)
+
+        self.data = self.transformer.convert_data(self.data)
         
+        for ad_data in self.data:
+            print(ad_data)
 
         
         # ============LOAD PART============
 
-        self.loader.database.ping()
+        self.data = [asdict(ad_data) for ad_data in self.data]
+        self.loader.database.insert_many(self.data)
 
         

@@ -17,3 +17,6 @@ class AdvertisementData:
     lat: str
     long: str
     date: any
+
+
+
