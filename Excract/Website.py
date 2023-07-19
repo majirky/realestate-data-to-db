@@ -90,9 +90,13 @@ class Website:
         advertisement = BeautifulSoup(page.content, 'html.parser')
 
         # geolocation
-        map_div = advertisement.find('div', {"id": "map-detail"})
-        self.advertisement_item_data_raw["lat"] = map_div["data-map-lat"]
-        self.advertisement_item_data_raw["long"] = map_div["data-map-long"]
+        try:
+            map_div = advertisement.find('div', {"id": "map-detail"})
+            self.advertisement_item_data_raw["lat"] = map_div["data-map-lat"]
+            self.advertisement_item_data_raw["long"] = map_div["data-map-long"]
+        except TypeError:
+            self.advertisement_item_data_raw["lat"] = 0.0
+            self.advertisement_item_data_raw["long"] = 0.0
 
         # date of update
         date = advertisement.find('div', "date").text

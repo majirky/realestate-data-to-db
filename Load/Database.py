@@ -5,10 +5,12 @@ import settings
 
 class Database:
 
-    def __init__(self) -> None:
+    def __init__(self, database, collection_name) -> None:
         self.client = MongoClient(settings.URI, server_api=ServerApi('1'))
-        self.db = self.client["real_estate_db"]
-        self.collection = self.db["Kosice"]
+        self.db = self.client[database]
+        self.collection = self.db[collection_name]
+        
+        self.collection.create_index("ad_id", unique=True)
     
     def ping(self):
         try:

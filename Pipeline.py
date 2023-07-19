@@ -16,7 +16,7 @@ class Pipeline:
 
         self.excractor = Excract()
         self.transformer = Transform()
-        self.loader = Load()
+        self.loader = Load(self.city)
 
         self.data = []
 
