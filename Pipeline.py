@@ -28,6 +28,7 @@ class Pipeline:
 
         # ============= EXTRACT PART================
         for current_page in range(1, self.pages_limit):
+            print(f"extracting page {current_page} ....")
             url = f"https://www.nehnutelnosti.sk/{self.city}/?p[page]={current_page}"
             web_page = requests.get(url)
             self.data.append(
@@ -38,16 +39,12 @@ class Pipeline:
             )
             
         # ============ TRANSFORM PART==========
-
+        print("transforming data....")
         self.data = self.transformer.convert_data(self.data)
         
-        for ad_data in self.data:
-            print(ad_data)
-
-        
         # ============LOAD PART============
-
+        print("loading data into mongoDB......")
         self.data = [asdict(ad_data) for ad_data in self.data]
-        self.loader.database.insert_many(self.data)
+        self.loader.database.insert_records(self.data)
 
         

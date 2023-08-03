@@ -38,7 +38,6 @@ class Website:
             if debug:
                 break
             
-        
         return page_ads_data
 
 
