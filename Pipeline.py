@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from Excract.Excract import Excract
 from Excract.Website import *
 from Load.Load import *
-from Load.Database import *
+#from Load.MongoDatabase import *
 from Transform.Transform import Transform
 import requests
 from dataclasses import asdict
@@ -43,8 +43,14 @@ class Pipeline:
         self.data = self.transformer.convert_data(self.data)
         
         # ============LOAD PART============
-        print("loading data into mongoDB......")
+        print("loading data into databases......")
         self.data = [asdict(ad_data) for ad_data in self.data]
-        self.loader.database.insert_records(self.data)
+        self.loader.load_data(self.data)
 
+
+if __name__ == "__main__":
+
+    # if debug==true, scraper scrapes only 1 ad
+    pipeline = Pipeline("kosice", 2, debug=True)
+    pipeline.data_to_db()
         

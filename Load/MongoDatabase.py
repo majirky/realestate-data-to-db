@@ -4,7 +4,7 @@ from pymongo.errors import DuplicateKeyError
 import settings
 
 
-class Database:
+class MongoDatabase:
 
     def __init__(self, database, collection_name) -> None:
         self.client = MongoClient(settings.URI, server_api=ServerApi('1'))
