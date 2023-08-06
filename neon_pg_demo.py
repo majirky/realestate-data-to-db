@@ -8,6 +8,13 @@ if __name__ == "__main__":
 
     db = PostgreDatabase()
 
+    print(db)
+
+    db2 = PostgreDatabase()
+
+    # same as in var db bc singleton.
+    print(db2)
+
     query = f"""
             select * from users
             where user_name = %(name)s;
@@ -17,6 +24,7 @@ if __name__ == "__main__":
     print(result)
 
     db._disconnect()
+    db2._disconnect()
 
 
 
