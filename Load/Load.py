@@ -7,7 +7,7 @@ class Load:
     def __init__(self, city) -> None:
         self.city = city
         self.mongo_database = MongoDatabase(settings.DATABASE, city)
-        self.load_pg_database = LoadToPostgre(settings.PG_DATABASE_URL)
+        self.load_pg_database = LoadToPostgre()
     
 
     def load_data(self, data):
@@ -18,4 +18,4 @@ class Load:
         # TODO postgres load
         # TODO call LoadToPostgre method here, but make for loop also here in case of multithreading implementation
         for record in data:
-            print(record)
+            self.load_pg_database.insert_record(record)
