@@ -1,15 +1,17 @@
 import psycopg2
 import settings
 
+def singleton(class_):
+    instances = {}
+    def getinstance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+    return getinstance
+
+@singleton
 class PostgreDatabase:
 
-    _instance = None
-
-    def __new__(self):
-        if self._instance is None:
-            self._instance = super().__new__(self)
-        return self._instance
-    
     def __init__(self) -> None:
         try:
             self.connection = psycopg2.connect(settings.PG_DATABASE_URL)

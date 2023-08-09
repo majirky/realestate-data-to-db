@@ -1,4 +1,4 @@
-
+from Dataclasses import AdvertisementData
 from Load.PostgreDatabase.PostgreDatabase import PostgreDatabase
 
 class AdDescription:
@@ -10,7 +10,7 @@ class AdDescription:
             self.create_table()
 
 
-    def check_table_existence(self, table_name):
+    def check_table_existence(self, table_name: str):
         query = """
             SELECT EXISTS (
             SELECT 1
@@ -36,4 +36,19 @@ class AdDescription:
             self.pg_database.commit()
         except Exception as e:
             print(f"issue while creating ad_description table: {e}")
+
+    def insert(self, record: AdvertisementData):
+        query = """
+            INSERT INTO ad_description (title, link)
+            VALUES (%(title)s, %(link)s);
+            RETURNING id
+        """
+        #UPSERT should not be needed, since we want records with unique ad_id in fact_table
+        self.pg_database.execute(query, {"title": record.title, 
+                                         "link": record.link})
+        inserted_id = self.pg_database.fetchone()[0]
+        self.pg_database.commit()
+
+        return inserted_id
+
 

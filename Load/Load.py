@@ -10,7 +10,7 @@ class Load:
         self.load_pg_database = LoadToPostgre()
     
 
-    def load_data(self, data):
+    def load_data(self, data: list):
 
         #Load to mongoDB
         #self.mongo_database.insert_records(data)
@@ -19,3 +19,6 @@ class Load:
         # TODO call LoadToPostgre method here, but make for loop also here in case of multithreading implementation
         for record in data:
             self.load_pg_database.insert_record(record)
+
+
+        self.load_pg_database.pg_database._disconnect()
