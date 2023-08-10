@@ -19,9 +19,9 @@ class LoadToPostgre:
         record_foregin_keys["ad_description_id"] = self.ad_description.insert(record)
 
 
-        #self.fact_table.insert(all FKs)
-        
-        print(record)
+        inserted_ad_id = self.fact_table.insert(record, record_foregin_keys)
+        print(f"inserted record with ad_ID: {inserted_ad_id} to neon Postgre")
+        #logger
 
 
 

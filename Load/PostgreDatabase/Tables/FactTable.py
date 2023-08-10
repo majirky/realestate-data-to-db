@@ -1,4 +1,4 @@
-
+from Dataclasses import AdvertisementData
 from Load.PostgreDatabase.PostgreDatabase import PostgreDatabase
 
 class FactTable:
@@ -36,3 +36,21 @@ class FactTable:
             self.pg_database.commit()
         except Exception as e:
             print(f"issue while creating ad_description table: {e}")
+
+    
+    def insert(self, record: AdvertisementData, foreign_keys: dict) -> int:
+        data = {
+            "ad_id": record.ad_id,
+            "id_description": foreign_keys["ad_description_id"]
+        }
+        #TODO add date column.
+        query = """
+            INSERT INTO fact_table (ad_id, id_description)
+            VALUES (%(ad_id)s, %(ad_description_id)s);
+            RETURNING ad_id
+        """
+        self.pg_database.execute(query, data)
+        inserted_ad_id = self.pg_database.fetchone()[0]
+        self.pg_database.commit()
+
+        return int(inserted_ad_id)

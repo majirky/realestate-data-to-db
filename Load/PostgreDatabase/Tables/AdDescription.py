@@ -37,7 +37,7 @@ class AdDescription:
         except Exception as e:
             print(f"issue while creating ad_description table: {e}")
 
-    def insert(self, record: AdvertisementData):
+    def insert(self, record: AdvertisementData) -> int:
         query = """
             INSERT INTO ad_description (title, link)
             VALUES (%(title)s, %(link)s);
@@ -49,6 +49,6 @@ class AdDescription:
         inserted_id = self.pg_database.fetchone()[0]
         self.pg_database.commit()
 
-        return inserted_id
+        return int(inserted_id)
 
 
