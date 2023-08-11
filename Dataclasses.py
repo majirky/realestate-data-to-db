@@ -16,7 +16,7 @@ class AdvertisementData:
     price_per_meter: str
     lat: str
     long: str
-    date: any
+    date: int
 
 
 

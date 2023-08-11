@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2.errors import UniqueViolation, IntegrityError
 import settings
 
 def singleton(class_):
@@ -31,15 +32,28 @@ class PostgreDatabase:
     def commit(self):
         try:
             self.connection.commit()
+        except IntegrityError as e:
+            if isinstance(e.__cause__, UniqueViolation):
+                raise UniqueViolation("record exists")
         except Exception as e:
             print(f"Problem with commiting changes to DB: {e}")
+    
+    
+    def rollback(self):
+        try:
+            self.connection.rollback()
+        except Exception as e:
+            print(f"Problem with rollback changes from DB: {e}")
 
 
     def execute(self, query: str, *args):
         try:
             self.cursor.execute(query, *args)
         except Exception as e:
-            print(f"Problem with executing query: {e}")
+            if isinstance(e, UniqueViolation):
+                raise UniqueViolation("record exists")
+            else:
+                print(f"Problem with executing query: {e}")
 
 
     def fetchone(self):
@@ -48,6 +62,7 @@ class PostgreDatabase:
             result = self.cursor.fetchone()
         except Exception as e:
             print(f"Problem with fetching one: {e}")
+            return None
         return result
     
 

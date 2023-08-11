@@ -1,12 +1,12 @@
 from Dataclasses import AdvertisementData
 from Load.PostgreDatabase.PostgreDatabase import PostgreDatabase
 
-class AdDescription:
+class Size:
     def __init__(self, pg_database: PostgreDatabase) -> None:
 
         self.pg_database = pg_database
 
-        if self.check_table_existence("ad_description") == False:
+        if self.check_table_existence("size") == False:
             self.create_table()
 
 
@@ -25,10 +25,11 @@ class AdDescription:
 
     def create_table(self):
         query = """
-            CREATE TABLE IF NOT EXISTS ad_description (
+            CREATE TABLE IF NOT EXISTS size (
             id serial PRIMARY KEY,
-            title VARCHAR(255),
-            link VARCHAR(255)
+            living_area FLOAT,
+            land_area FLOAT,
+            price_per_meter FLOAT
             )
         """
         try:
@@ -37,18 +38,18 @@ class AdDescription:
         except Exception as e:
             print(f"issue while creating ad_description table: {e}")
 
+
     def insert(self, record: AdvertisementData) -> int:
         query = """
-            INSERT INTO ad_description (title, link)
-            VALUES (%(title)s, %(link)s)
+            INSERT INTO size (living_area, land_area, price_per_meter)
+            VALUES (%(living_area)s, %(land_area)s, %(price_per_meter)s)
             RETURNING id;
         """
         #UPSERT should not be needed, since we want records with unique ad_id in fact_table
-        self.pg_database.execute(query, {"title": record.title, 
-                                         "link": record.link})
+        self.pg_database.execute(query, {"living_area": record.living_area,
+                                         "land_area": record.land_area,
+                                         "price_per_meter": record.price_per_meter})
         inserted_id = int(self.pg_database.fetchone()[0])
         #commit is in fact_table insert
 
         return inserted_id
-
-

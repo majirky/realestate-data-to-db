@@ -1,5 +1,6 @@
 from Dataclasses import AdvertisementData
 from Load.PostgreDatabase.PostgreDatabase import PostgreDatabase
+from psycopg2.errors import UniqueViolation
 
 class FactTable:
     def __init__(self, pg_database: PostgreDatabase) -> None:
@@ -28,7 +29,10 @@ class FactTable:
             CREATE TABLE IF NOT EXISTS fact_table (
             ad_id INT UNIQUE,
             id_description INT,
-            FOREIGN KEY (id_description) REFERENCES ad_description (id) ON DELETE CASCADE
+            id_size INT,
+            date BIGINT,
+            FOREIGN KEY (id_description) REFERENCES ad_description (id) ON DELETE CASCADE,
+            FOREIGN KEY (id_size) REFERENCES size (id) ON DELETE CASCADE
             )
         """
         try:
@@ -41,16 +45,30 @@ class FactTable:
     def insert(self, record: AdvertisementData, foreign_keys: dict) -> int:
         data = {
             "ad_id": record.ad_id,
-            "id_description": foreign_keys["ad_description_id"]
+            "id_description": foreign_keys["id_description"],
+            "id_size": foreign_keys["id_size"],
+            "date": record.date
         }
-        #TODO add date column.
-        query = """
-            INSERT INTO fact_table (ad_id, id_description)
-            VALUES (%(ad_id)s, %(ad_description_id)s);
-            RETURNING ad_id
-        """
-        self.pg_database.execute(query, data)
-        inserted_ad_id = self.pg_database.fetchone()[0]
-        self.pg_database.commit()
 
-        return int(inserted_ad_id)
+        query = """
+            INSERT INTO fact_table (ad_id, id_description, id_size, date)
+            VALUES (%(ad_id)s, %(id_description)s, %(id_size)s, %(date)s)
+            RETURNING ad_id;
+        """
+        inserted_ad_id = None
+        try:
+            self.pg_database.execute(query, data)
+            inserted_ad_id = self.pg_database.fetchone()
+            self.pg_database.commit()
+        except UniqueViolation as e:
+            print(f"record for ad with id {record.ad_id} is already in DB.")
+            self.pg_database.rollback()
+        except Exception as e:
+            print(f"problem with inserting into fact table: {e}")
+            self.pg_database.rollback()
+        else:
+            inserted_ad_id = int(inserted_ad_id[0])
+            print(f"inserted record with ad_ID: {inserted_ad_id} to neon Postgre")
+            #logger
+
+        return inserted_ad_id

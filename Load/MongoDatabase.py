@@ -1,6 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError
+from dataclasses import asdict
 import settings
 
 
@@ -27,6 +28,7 @@ class MongoDatabase:
         Args:
             data (list): list of dictionaries of data, that should be insertet into colection.
         """
+        data = [asdict(ad_data) for ad_data in data]
         for record in data:
             try:
                 self.collection.insert_one(record)

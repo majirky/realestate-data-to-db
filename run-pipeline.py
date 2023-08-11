@@ -44,7 +44,7 @@ class Pipeline:
         
         # ============LOAD PART============
         print("loading data into databases......")
-        self.data = [asdict(ad_data) for ad_data in self.data]
+        #self.data = [asdict(ad_data) for ad_data in self.data]
         self.loader.load_data(self.data)
 
 

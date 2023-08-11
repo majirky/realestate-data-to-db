@@ -39,11 +39,11 @@ class Transform:
         return float_value
     
     
-    def string_to_timestamp(self, string_value: str) ->float:
+    def string_to_timestamp(self, string_value: str) ->int:
         datetime_object = datetime.strptime(string_value, "%d.%m.%Y")
         timestamp = datetime_object.timestamp()
 
-        return timestamp
+        return int(timestamp)
     
     def location_to_cityarea(self, location: str) -> str:
         try:
