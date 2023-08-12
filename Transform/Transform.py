@@ -20,6 +20,7 @@ class Transform:
                 ad_data.date = self.string_to_timestamp(ad_data.date)
 
                 ad_data.city_area = self.location_to_cityarea(ad_data.city_area)
+                ad_data.city = self.capitalize_words(ad_data.city)
 
                 if ad_data.price == 0.0:
                     continue
@@ -51,3 +52,9 @@ class Transform:
             return split_string[-1].strip()
         except:
             return location
+    
+    def capitalize_words(self, input_string: str):
+        words = input_string.split()
+        capitalized_words = [word.capitalize() for word in words]
+        result_string = ' '.join(capitalized_words)
+        return result_string

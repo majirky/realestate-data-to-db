@@ -8,6 +8,7 @@ class AdvertisementData:
     housing: str
     housing_category: str
     city_area: str
+    city: str
     housing_type: str
     housing_state: str
     price: str

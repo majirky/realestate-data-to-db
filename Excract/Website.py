@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import requests
 
 class Website:
-    def __init__(self):
-        pass
+    def __init__(self, city):
+        self.city = city
 
     
     def scrape_advertisements_container(self, soup: BeautifulSoup, debug: bool) -> list:
@@ -67,6 +67,7 @@ class Website:
         self.advertisement_item_data_raw["housing"] = advertisement_item["data-ga4-category"]
         self.advertisement_item_data_raw["housing_category"] = advertisement_item["data-ga4-category2"]
         self.advertisement_item_data_raw["city_area"] = advertisement_item["data-ga4-category3"]
+        self.advertisement_item_data_raw["city"] = self.city
         # TODO  refractor so only city stays (pomocou split a posledne v liste ulozit)
         self.advertisement_item_data_raw["housing_type"] = advertisement_item["data-ga4-category4"]
         self.advertisement_item_data_raw["housing_state"] = advertisement_item["data-ga4-category5"]
