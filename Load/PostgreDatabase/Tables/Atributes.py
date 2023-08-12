@@ -1,12 +1,12 @@
 from Dataclasses import AdvertisementData
 from Load.PostgreDatabase.PostgreDatabase import PostgreDatabase
 
-class Cities:
+class Atributes:
     def __init__(self, pg_database: PostgreDatabase) -> None:
 
         self.pg_database = pg_database
 
-        if self.check_table_existence("cities") == False:
+        if self.check_table_existence("atributes") == False:
             self.create_table()
 
 
@@ -25,40 +25,33 @@ class Cities:
 
     def create_table(self):
         query = """
-            CREATE TABLE IF NOT EXISTS cities (
+            CREATE TABLE IF NOT EXISTS atributes (
             id serial PRIMARY KEY,
-            name VARCHAR(255)
+            housing VARCHAR(128),
+            housing_category VARCHAR(128),
+            housing_type VARCHAR(128),
+            housing_state VARCHAR(128)
             )
         """
         try:
             self.pg_database.execute(query)
             self.pg_database.commit()
         except Exception as e:
-            print(f"issue while creating Cities table: {e}")
+            print(f"issue while creating atributes table: {e}")
+
     
-
-    def get_or_insert(self, record: AdvertisementData):
+    def insert(self, record: AdvertisementData):
         query = """
-            Select id 
-            FROM cities
-            WHERE name = %(name)s;
-        """
-        self.pg_database.execute(query, {"name": record.city})
-        inserted_id = self.pg_database.fetchone()
-        if inserted_id is None:
-            return self.insert(record)
-        else:
-            return int(inserted_id[0])
-
-
-    def insert(self, record: AdvertisementData) -> int:
-        query = """
-            INSERT INTO cities (name)
-            VALUES (%(name)s)
+            INSERT INTO atributes (housing, housing_category, housing_type, housing_state)
+            VALUES (%(housing)s, %(housing_category)s, %(housing_type)s, %(housing_state)s)
             RETURNING id;
         """
         #UPSERT should not be needed, since we want records with unique ad_id in fact_table
-        self.pg_database.execute(query, {"name": record.city})
+        self.pg_database.execute(query, {"housing": record.housing, 
+                                         "housing_category": record.housing_category,
+                                         "housing_type": record.housing_type,
+                                         "housing_state": record.housing_state
+                                         })
         inserted_id = int(self.pg_database.fetchone()[0])
         #commit is in fact_table insert
 

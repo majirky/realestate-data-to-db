@@ -30,9 +30,13 @@ class FactTable:
             ad_id INT UNIQUE,
             id_description INT,
             id_size INT,
+            id_locations INT,
+            id_atributes INT,
+            price FLOAT,
             date BIGINT,
             FOREIGN KEY (id_description) REFERENCES ad_description (id) ON DELETE CASCADE,
-            FOREIGN KEY (id_size) REFERENCES size (id) ON DELETE CASCADE
+            FOREIGN KEY (id_size) REFERENCES size (id) ON DELETE CASCADE,
+            FOREIGN KEY (id_atributes) REFERENCES atributes (id) ON DELETE CASCADE
             )
         """
         try:
@@ -47,12 +51,15 @@ class FactTable:
             "ad_id": record.ad_id,
             "id_description": foreign_keys["id_description"],
             "id_size": foreign_keys["id_size"],
+            "id_locations": foreign_keys["id_locations"],
+            "id_atributes": foreign_keys["id_atributes"],
+            "price": record.price,
             "date": record.date
         }
 
         query = """
-            INSERT INTO fact_table (ad_id, id_description, id_size, date)
-            VALUES (%(ad_id)s, %(id_description)s, %(id_size)s, %(date)s)
+            INSERT INTO fact_table (ad_id, id_description, id_size, id_locations, id_atributes, price, date)
+            VALUES (%(ad_id)s, %(id_description)s, %(id_size)s, %(id_locations)s, %(id_atributes)s, %(price)s, %(date)s)
             RETURNING ad_id;
         """
         inserted_ad_id = None

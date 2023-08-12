@@ -14,12 +14,17 @@ def singleton(class_):
 class PostgreDatabase:
 
     def __init__(self) -> None:
+        self.connection = None
+        self.cursor = None
+
+    
+    def _connect(self):
         try:
             self.connection = psycopg2.connect(settings.PG_DATABASE_URL)
             self.cursor = self.connection.cursor()
         except Exception as e:
             print(f"Problem with connecting to Neon-PostgreSQL: {e}")
-
+            
 
     def _disconnect(self):
         try:

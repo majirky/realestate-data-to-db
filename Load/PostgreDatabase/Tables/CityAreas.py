@@ -34,14 +34,14 @@ class CityAreas:
             self.pg_database.execute(query)
             self.pg_database.commit()
         except Exception as e:
-            print(f"issue while creating Cities table: {e}")
+            print(f"issue while creating City Areas table: {e}")
     
 
     def get_or_insert(self, record: AdvertisementData):
         query = """
-            Select name 
+            Select id 
             FROM city_areas
-            WHERE name == %(name)s;
+            WHERE name = %(name)s;
         """
         self.pg_database.execute(query, {"name": record.city_area})
         inserted_id = self.pg_database.fetchone()

@@ -51,6 +51,6 @@ class Pipeline:
 if __name__ == "__main__":
 
     # if debug==true, scraper scrapes only 1 ad
-    pipeline = Pipeline("kosice", 2, debug=True)
+    pipeline = Pipeline("kosice", 30, debug=False)
     pipeline.data_to_db()
         

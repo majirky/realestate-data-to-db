@@ -16,7 +16,11 @@ class Load:
         #self.mongo_database.insert_records(data)
 
         # TODO postgres load
-        # TODO call LoadToPostgre method here, but make for loop also here in case of multithreading implementation
+
+        self.load_pg_database.pg_database._connect()
+        
+        self.load_pg_database.initialize_tables()
+
         for record in data:
             self.load_pg_database.insert_record(record)
 

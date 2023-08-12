@@ -44,7 +44,7 @@ class Locations:
             self.pg_database.execute(query)
             self.pg_database.commit()
         except Exception as e:
-            print(f"issue while creating ad_description table: {e}")
+            print(f"issue while creating Locations table: {e}")
     
 
     def insert(self, record: AdvertisementData) -> int:
