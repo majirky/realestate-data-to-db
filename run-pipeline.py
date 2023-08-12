@@ -9,12 +9,12 @@ from dataclasses import asdict
 
 class Pipeline:
 
-    def __init__(self, city, pages_limit, debug = False):
-        self.city = city
+    def __init__(self, city: str, pages_limit, debug = False):
+        self.city = city.lower()
         self.pages_limit = pages_limit
         self.debug = debug
 
-        self.excractor = Excract()
+        self.excractor = Excract(self.city)
         self.transformer = Transform()
         self.loader = Load(self.city)
 
