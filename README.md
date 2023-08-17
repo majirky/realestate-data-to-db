@@ -1,4 +1,4 @@
-## Realestate data to Database
+## Realestate data to Database :house:
 
 This code acts as small data pipeline that:  
 - Extracts data from realestate ads on <www.nehnutelnosti.sk> (for Košice city)
@@ -8,6 +8,10 @@ This code acts as small data pipeline that:
     - PostgreSQL database (using Neon, serverless postgre solution)
 
 With this data stored in the database, we can now proceed to generate compelling analytics and reports in the next steps.
+
+### Next steps  
+- implement orchestration :pushpin:
+- Create reports in Tableau :pushpin:
 
 ### UML Diagram of repo
 
