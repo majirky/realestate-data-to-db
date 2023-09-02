@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import argparse
 from Excract.Excract import Excract
 from Excract.Website import *
 from Load.Load import *
@@ -50,7 +51,14 @@ class Pipeline:
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser(description="Copies realestate ads and saves them into DB")
+    parser.add_argument("-p", "--pages", type=int, default=20,
+                        help="Number of pages to process (default: 20)")
+    
+    args = parser.parse_args()
+
     # if debug==true, scraper scrapes only 1 ad
-    pipeline = Pipeline("kosice", 30, debug=False)
+    pipeline = Pipeline("kosice", args.pages, debug=False)
+    print(f"Starting pipeline to proces {args.pages} pages...")
     pipeline.data_to_db()
         
