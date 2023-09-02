@@ -1,13 +1,17 @@
-## Realestate data to Database
+## Realestate data to Database :house:
 
 This code acts as small data pipeline that:  
-- Excracts data from realestate ad on <www.nehnutelnosti.sk>
+- Extracts data from realestate ads on <www.nehnutelnosti.sk> (for Košice city)
 - Transforms data so they are easier to handle later. (For example date to unix timestamp)
 - Loads data into:
     - MongoDB document database
-    - Postgresql database
+    - PostgreSQL database (using Neon, serverless postgre solution)
 
-With this data stored in database, we can continue create interesting analytics and reports in next steps.
+With this data stored in the database, we can now proceed to generate compelling analytics and reports in the next steps.
+
+### Next steps  
+- implement orchestration :pushpin:
+- Create reports in Tableau :pushpin:
 
 ### UML Diagram of repo
 
